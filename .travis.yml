@@ -24,7 +24,7 @@ jobs:
     # still show `PERL_VERSION=5.28.1.1`, because it inherits the first value of
     # PERL_VERSION above, even though we don't use it.
     - &perl-testing
-      stage: Test 1
+      stage: Tests
       os: windows
       language: shell
       env:
@@ -74,6 +74,5 @@ jobs:
 #        - gmake test
 
     - &perl-testing
-      stage: Test 2
       env:
         - PERL_VERSION: 5.26.3.1
