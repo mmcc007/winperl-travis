@@ -73,6 +73,6 @@ jobs:
 #        - gmake
 #        - gmake test
 
-    - &perl-testing
+    - <<: *perl-testing
       env:
         - PERL_VERSION: 5.26.3.1
