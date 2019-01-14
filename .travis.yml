@@ -1,19 +1,19 @@
-# Default "Test" stage supports a matrix of different Perl versions to install.
-os: windows
-language: shell
-env:
-  # https://chocolatey.org/packages/StrawberryPerl#versionhistory
-  - PERL_VERSION: 5.28.1.1
-  - PERL_VERSION: 5.26.3.1
-before_install:
-  - cinst -y strawberryperl --version $PERL_VERSION
-  - export "PATH=/c/Strawberry/perl/site/bin:/c/Strawberry/perl/bin:/c/Strawberry/c/bin:$PATH"
-install:
-  - cpanm --notest --installdeps .
-script:
-  - perl Makefile.PL
-  - gmake
-  - gmake test
+## Default "Test" stage supports a matrix of different Perl versions to install.
+#os: windows
+#language: shell
+#env:
+#  # https://chocolatey.org/packages/StrawberryPerl#versionhistory
+#  - PERL_VERSION: 5.28.1.1
+#  - PERL_VERSION: 5.26.3.1
+#before_install:
+#  - cinst -y strawberryperl --version $PERL_VERSION
+#  - export "PATH=/c/Strawberry/perl/site/bin:/c/Strawberry/perl/bin:/c/Strawberry/c/bin:$PATH"
+#install:
+#  - cpanm --notest --installdeps .
+#script:
+#  - perl Makefile.PL
+#  - gmake
+#  - gmake test
 
 # Secondary stages to include, e.g. if the default "Test" stage is on Linux, and
 # you want to add stages to test on Windows.
@@ -23,9 +23,12 @@ jobs:
     # you just want to test against the latest version of Perl. The Stage will
     # still show `PERL_VERSION=5.28.1.1`, because it inherits the first value of
     # PERL_VERSION above, even though we don't use it.
-    - stage: Windows
+    - &perl-testing
+      stage: Test 1
       os: windows
       language: shell
+      env:
+        - PERL_VERSION: 5.28.1.1
       before_install:
         - cinst -y strawberryperl
         - export "PATH=/c/Strawberry/perl/site/bin:/c/Strawberry/perl/bin:/c/Strawberry/c/bin:$PATH"
@@ -40,32 +43,37 @@ jobs:
     # versions. Yes this is redundant.
     # https://github.com/travis-ci/travis-ci/issues/8295
     # First instance of "stage: Strawberry" tests 5.28.1.1.
-    - stage: Strawberry
-      os: windows
-      language: shell
+#    - stage: Strawberry
+#      os: windows
+#      language: shell
+#      env:
+#      - PERL_VERSION: 5.28.1.1
+#      before_install:
+#        - cinst -y strawberryperl --version $PERL_VERSION
+#        - export "PATH=/c/Strawberry/perl/site/bin:/c/Strawberry/perl/bin:/c/Strawberry/c/bin:$PATH"
+#      install:
+#        - cpanm --notest --installdeps .
+#      script:
+#        - perl Makefile.PL
+#        - gmake
+#        - gmake test
+#    # Second instance of "stage: Strawberry" tests 5.26.3.1.
+#    - stage: Strawberry
+#      os: windows
+#      language: shell
+#      env:
+#      - PERL_VERSION: 5.26.3.1
+#      before_install:
+#        - cinst -y strawberryperl --version $PERL_VERSION
+#        - export "PATH=/c/Strawberry/perl/site/bin:/c/Strawberry/perl/bin:/c/Strawberry/c/bin:$PATH"
+#      install:
+#        - cpanm --notest --installdeps .
+#      script:
+#        - perl Makefile.PL
+#        - gmake
+#        - gmake test
+
+    - &perl-testing
+      stage: Test 2
       env:
-      - PERL_VERSION: 5.28.1.1
-      before_install:
-        - cinst -y strawberryperl --version $PERL_VERSION
-        - export "PATH=/c/Strawberry/perl/site/bin:/c/Strawberry/perl/bin:/c/Strawberry/c/bin:$PATH"
-      install:
-        - cpanm --notest --installdeps .
-      script:
-        - perl Makefile.PL
-        - gmake
-        - gmake test
-    # Second instance of "stage: Strawberry" tests 5.26.3.1.
-    - stage: Strawberry
-      os: windows
-      language: shell
-      env:
-      - PERL_VERSION: 5.26.3.1
-      before_install:
-        - cinst -y strawberryperl --version $PERL_VERSION
-        - export "PATH=/c/Strawberry/perl/site/bin:/c/Strawberry/perl/bin:/c/Strawberry/c/bin:$PATH"
-      install:
-        - cpanm --notest --installdeps .
-      script:
-        - perl Makefile.PL
-        - gmake
-        - gmake test
+        - PERL_VERSION: 5.26.3.1
